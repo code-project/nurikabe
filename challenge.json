@@ -1,0 +1,6 @@
+{
+  "editable": ["es6/src/nurikabe.js"],
+  "allowNewFile": "true",
+  "main": "es6/src/nurikabe.js",
+  "test": "mocha --timeout 600000"
+}

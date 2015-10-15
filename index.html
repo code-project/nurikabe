@@ -1,0 +1,81 @@
+<html>
+<head>
+<style>
+table {
+  display: inline-block;
+  border-collapse:collapse;
+  border:0px;
+  margin: 20px;
+}
+td {
+  padding: 0px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid;
+  text-align: center;
+}
+
+td.wall {
+  background: black;
+}
+</style>
+<script>
+if (typeof(exports) === "undefined") var exports = {};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script>
+<script src="es6/src/nurikabe.js" type="text/babel"></script>
+<script src="es6/src/testcases.js" type="text/babel"></script>
+<script type="text/babel">
+
+function buildTable(str) {
+  var $table = $("<table/>");
+  str.split("\n").filter((v) => {
+    return v.length > 0;
+  }).forEach((row) => {
+    var $tr = $("<tr/>");
+    row.split(",").forEach((v) => {
+      var $td = $("<td/>").append(v);
+      if (v === "x") {
+        $td.addClass("wall");
+      }
+      $tr.append($td);
+    });
+    $table.append($tr);
+  });
+  return $table;
+}
+
+function solveButton($parent, v) {
+  var $button = $("<button>Solve</button>");
+  $button.click(() => {
+    if (!Board.isValidStr(v)) {
+      $parent.append("Invalid input string");
+    }
+    var t = new Date().getTime();
+    var board = new Board(v);
+    $parent.append(buildTable(board.solve().toString()));
+    var t2 = new Date().getTime() - t;
+    $parent.append($(`<p>solved = ${board.isSolved()}</p>`));
+    $parent.append($(`<p>invalid = ${board.isInvalid()}</p>`));
+    $parent.append($(`<p>time = ${t2}ms</p>`));
+  });
+  return $button;
+}
+
+var $div = $("#testcases");
+TESTCASES.concat(EXTRA).forEach((v, i) => {
+  var $parent = $("<div/>");
+  $parent.append($("<h2/>").append("TestCase " + (i+1)));
+  $parent.append(solveButton($parent, v));
+  $parent.append(buildTable(v));
+  $div.append($parent);
+});
+
+</script>
+</head>
+<body>
+<h1>Test cases</h1>
+<div id="testcases"></div>
+</body>
+</html>

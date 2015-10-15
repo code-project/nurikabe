@@ -1,0 +1,4 @@
+build:
+  - npm install
+  - grunt
+test: mocha --timeout 600000 --slow 100
